@@ -1,0 +1,199 @@
+openapi: 3.1.0
+info:
+  title: To-Do-Liste - OpenAPI 3.1
+  description:
+  version: 1.0.11
+servers:
+  - url: http://127.0.0.1:5000
+tags:
+  - name: get
+    description: Alle Get-Request
+  - name: delete
+    description: Alle Delete-Request
+  - name: put
+    description: Alle Put-Request
+  - name: post
+    description: Alle Post-Request
+paths:
+  /todo-list/{list_id}:
+    get:
+      tags:
+        - get
+      summary: Liefert alle Einträge einer Todo-Liste zurück.
+      description: Liefert alle Einträge einer Todo-Liste zurück.
+      parameters:
+        - name: list_id
+          in: query
+          description: UUID von der To-Do-Liste.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Erfolgreiche Anfrage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/todoList'
+        '404':
+          description: Fehlerhafte ID
+    delete:
+      tags:
+        - delete
+      summary: Löscht eine komplette Todo-Liste mit allen Einträgen.
+      description: Löscht eine komplette Todo-Liste mit allen Einträgen.
+      parameters:
+        - name: list_id
+          in: query
+          description: UUID von der To-Do-Liste.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Löschen erfolgreich
+          content:
+            text:
+              schema:
+                type: string
+                enum:
+                  - Löschen erfolgreich
+        '404':
+          description: Fehlerhafte ID
+  /todo-list:
+    post:
+      tags:
+        - post
+      summary: Fügt eine neue Todo-Liste hinzu.
+      description: Fügt eine neue Todo-Liste hinzu.
+      operationId: addList
+      requestBody:
+        description: Daten in Form eines JSON
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/postrequest'
+        required: true
+      responses:
+        '200':
+          description: Erfolgreich Liste erstellt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/todoList'
+  /todo-list/{list_id}/entry:
+    post:
+      tags:
+        - post
+      summary: Fügt einen Eintrag zu einer bestehenden Todo-Liste hinzu.
+      description: Fügt einen Eintrag zu einer bestehenden Todo-Liste hinzu.
+      parameters:
+        - name: list_id
+          in: query
+          description: UUID von der To-Do-Liste.
+          schema:
+            type: string
+      requestBody:
+        description: Daten in Form eines JSON
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/todoList'
+        required: true
+      responses:
+        '200':
+          description: Erfolgreiche Anfrage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/todoList'
+        '404':
+          description: Fehlerhafte ID
+        '400' :
+          description: Fehlerhafte Daten
+  /todo-list/delete/{list_id}/{entry_id}:
+    delete:
+      tags:
+        - delete
+      summary: Löscht einen einzelnen Eintrag einer Todo-Liste.
+      description: Löscht einen einzelnen Eintrag einer Todo-Liste.
+      parameters:
+        - name: list_id
+          in: query
+          description: UUID von der To-Do-Liste.
+          schema:
+            type: string
+        - name: entry_id
+          in: query
+          description: ID von dem Listeneintrag.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Löschen erfolgreich
+          content:
+            text:
+              schema:
+                type: string
+                enum:
+                  - Löschen erfolgreich
+        '404':
+          description: Fehlerhafte ID
+  /todo-list/{list_id}/entry/{entry_id}:
+    put:
+      tags:
+        - put
+      summary: Aktualisiert einen bestehenden Eintrag
+      description: Aktualisiert einen bestehenden Eintrag
+      parameters:
+        - name: list_id
+          in: query
+          description: UUID von der To-Do-Liste.
+          schema:
+            type: string
+            format: uuid
+        - name: entry_id
+          in: query
+          description: ID von dem Listeneintrag.
+          schema:
+            type: string
+      requestBody:
+        description: Daten in Form eines JSON
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/todoList'
+        required: true
+      responses:
+        '200':
+          description: Erfolgreiche Anfrage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/todoList'
+        '404':
+          description: Fehlerhafte ID
+        '400':
+          description: Fehlerhafte Daten
+components:
+  schemas:
+    todoList:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '95e707d3-fa0b-4128-973c-b87d5c3e6811'
+        name:
+          type: string
+          example: 'Neue Liste'
+        beschreibung:
+          type: string
+          example: 'Lernen für AB01'
+    postrequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'neue Liste'
+        beschreibung:
+          type: string
+          example: 'Einkaufen'

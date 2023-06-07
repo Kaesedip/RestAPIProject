@@ -28,7 +28,7 @@ todos = [
 ]
 
 
-# add some headers to allow cross origin access to the API on this server, necessary for using preview in Swagger Editor!
+# add some headers to allow cross-origin access to the API on this server, necessary for using preview in Swagger Editor!
 @app.after_request
 def apply_cors_header(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
@@ -38,7 +38,7 @@ def apply_cors_header(response):
 
 
 @app.route('/todo-list', methods=['POST'])
-def handleNewListEntrie():
+def handleNewListEntries():
     newList = request.get_json(force=True)
     if not newList:
         abort(400, "Keine Daten in der Liste.")
@@ -50,13 +50,13 @@ def handleNewListEntrie():
 
 
 @app.route('/todo-list/<list_id>', methods=['GET', 'DELETE'])
-def handlelist(list_id):
+def handleList(list_id):
     list_by_id = None
     for l in todo_lists:
         if l['id'] == list_id:
             list_by_id = l
             break
-    if not (list_by_id):
+    if not list_by_id:
         abort(404)
     if request.method == 'GET':
         print("Found List with id: {} ".format(list_id))
@@ -68,7 +68,7 @@ def handlelist(list_id):
 
 
 @app.route('/todo-list/<list_id>/entry', methods=['POST'])
-def handleNewListItemEntrie(list_id):
+def handleNewListItemEntries(list_id):
     newitem = request.get_json(force=True)
     if not newitem:
         abort(400, "Keine Daten in der Liste.")
@@ -79,10 +79,9 @@ def handleNewListItemEntrie(list_id):
         if l['id'] == list_id:
             list_by_id = l
             break
-    if not (list_by_id):
+    if not list_by_id:
         abort(404)
-    itemForList = {}
-    itemForList['id'] = uuid.uuid4()
+    itemForList = {'id': uuid.uuid4()}
     for i in todos:
         if i['id'] == itemForList['id']:
             abort(404, "Fehler bei der erstellung der UUID.")

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: To-Do-Liste - OpenAPI 3.1
-  description:
+  description: Test
   version: 1.0.11
 servers:
   - url: http://127.0.0.1:5000
@@ -37,6 +37,7 @@ paths:
                 $ref: '#/components/schemas/todoList'
         '404':
           description: Fehlerhafte ID
+        default:
     delete:
       tags:
         - delete
@@ -57,6 +58,7 @@ paths:
                 type: string
                 enum:
                   - Löschen erfolgreich
+        default:
         '404':
           description: Fehlerhafte ID
   /todo-list:
@@ -74,6 +76,7 @@ paths:
               $ref: '#/components/schemas/postrequest'
         required: true
       responses:
+        default:
         '200':
           description: Erfolgreich Liste erstellt
           content:
@@ -108,6 +111,7 @@ paths:
                 $ref: '#/components/schemas/todoList'
         '404':
           description: Fehlerhafte ID
+        default:
         '400' :
           description: Fehlerhafte Daten
   /todo-list/delete/{list_id}/{entry_id}:
@@ -136,6 +140,7 @@ paths:
                 type: string
                 enum:
                   - Löschen erfolgreich
+        default:
         '404':
           description: Fehlerhafte ID
   /todo-list/{list_id}/entry/{entry_id}:
@@ -172,6 +177,7 @@ paths:
                 $ref: '#/components/schemas/todoList'
         '404':
           description: Fehlerhafte ID
+        default:
         '400':
           description: Fehlerhafte Daten
 components:
